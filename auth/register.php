@@ -1,5 +1,16 @@
+<?php
+require("script/config.php");
+
+require("script/sessionCheckScript.php");
+$auth = checkLogin();
+
+if ($auth["status"]) {
+	header("Location: " . redirectAfterLogin);
+	die();
+}
+?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,7 +20,7 @@
 <body>
 	<div class="container">
 		<h1>Register</h1>
-		<form class="row g-3" onsubmit="return register()">
+		<form class="row g-3">
 			<div class="alert alert-danger" id="bannerError" role="alert" style="display: none;"></div>
 			<div class="alert alert-success" id="bannerSuccess" role="alert" style="display: none;"></div>
 
@@ -32,9 +43,9 @@
 			<div class="col-md-6">
 				<label for="inputCheckPassword" class="form-label">Password</label>
 				<input type="password" class="form-control" id="inputCheckPassword">
-			</div>
+				</div>
 			<div class="col-12">
-				<button class="btn btn-primary g-recaptcha" data-sitekey="6LfCz4IoAAAAAGjw3tYyovt9bslexl1f9DY2aXoT" data-callback="register">Sign in</button>
+				<button class="btn btn-primary g-recaptcha" data-sitekey="<?php print(reCaptchaPublic) ?>" data-callback="register">Sign in</button>
 			</div>
 
 		</form>

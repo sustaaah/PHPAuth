@@ -36,7 +36,7 @@ define("reCaptchaPublic", ""); // get your code here: https://www.google.com/rec
 define("reCaptchaSecret", ""); // get your code here: https://www.google.com/recaptcha/admin/
 
 // website
-define("urlToAuth", ""); // url to the folder that contains "auth" folder
+define("urlToAuth", ""); // url to the folder that contains "auth" folder, es. https://www.sustaaah.com/auth/
 define("redirectAfterLogin", ""); // url to redirect on login, like index page
 define("redirectAfterLogout", ""); // url to redirect on logout, like login page
 

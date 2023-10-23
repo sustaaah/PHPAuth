@@ -48,16 +48,22 @@ function login(tokenCaptcha) {
 				// error response
 				bannerError.style.display = "block";
 
-				if (responseData["cause"] === "serverError") {
-					bannerError.innerHTML = "The server encountered an error";
-				} else if (responseData["cause"] === "captchaFail") {
-					bannerError.innerHTML = "Your captcha response could not be verified, please try again";
-				} else if (responseData["cause"] === "missingData") {
-					bannerError.innerHTML = "The form was not sent correctly and the server did not receive all the necessary data, please try again";
-				} else if (responseData["cause"] === "mailPassWrong") {
-					bannerError.innerHTML = "Mail or password wrong";
-				} else {
-					bannerError.innerHTML = "The response was not compiled correctly by the server and it is not possible to know the problem";
+				switch (responseData["cause"]) {
+					case "serverError":
+						bannerError.innerHTML = "The server encountered an error.";
+						break;
+					case "captchaFail":
+						bannerError.innerHTML = "Your captcha response could not be verified, please try again";
+						break;
+					case "missingData":
+						bannerError.innerHTML = "The form was not sent correctly and the server did not receive all the necessary data, please try again";
+						break;
+					case "mailPassWrong":
+						bannerError.innerHTML = "Mail or password wrong";
+						break;
+					default:
+						bannerError.innerHTML = "The response was not compiled correctly by the server and it is not possible to know the problem";
+						break;
 				}
 			} else {
 				// logical error

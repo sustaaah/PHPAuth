@@ -47,7 +47,7 @@ function logout()
 			error_log("\n" . __FILE__ . " : " . time() . " : " . $e, errorLogMode, errorLogPath);
 		}
 	} else {
-		$response["cuase"] = "noCookieValue";
+		$response["cause"] = "noCookieValue";
 		$response["redirectUrl"] = redirectAfterLogout;
 	}
 

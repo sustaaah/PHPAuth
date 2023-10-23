@@ -12,7 +12,7 @@ require(__DIR__ . '/lib/PHPMailer/SMTP.php');
  * @param array $params
  * @return array
  */
-function mailer($template, $mailTo, $nameTo, $surnameTo, array $params)
+function mailer($template, $mailTo, $nameTo, $surnameTo, array $params = array())
 {
 	require('config.php');
 	$responseStatus = array();
@@ -43,14 +43,21 @@ function mailer($template, $mailTo, $nameTo, $surnameTo, array $params)
 			// TODO finish this
 			$subject = "Account Login Notification";
 			break;
+		case "passwordResetLink":
+			$message = file_get_contents(__DIR__ . '/mailTemplate/passwordResetLink.html');
+			$message = str_replace("$[name]", $nameTo, $message);
+			$message = str_replace("$[resetLink]", $params["resetLink"], $message);
+
+			$subject = "Password Reset - Reset Link";
+			break;
 		default:
 			return $responseStatus;
 			break;
 	}
 
-	$PHPMailer = new PHPMailer\PHPMailer\PHPMailer;
-
 	try {
+		$PHPMailer = new PHPMailer\PHPMailer\PHPMailer;
+
 		$PHPMailer->isSMTP();
 		$PHPMailer->Host = mailSmtpHostname;
 		$PHPMailer->SMTPAuth = true;
