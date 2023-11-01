@@ -8,3 +8,5 @@ exclude:
       - auth/script/config.php
       - auth/script/lib/jwt
       - auth/script/lib/PHPMailer
+php:
+  version: "8.2"
