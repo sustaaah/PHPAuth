@@ -1,0 +1,10 @@
+version: "1.0"
+linter: jetbrains/qodana-php:2023.2
+include:
+  - name: CheckDependencyLicenses
+exclude:
+  - name: All
+    paths:
+      - auth/script/config.php
+      - auth/script/lib/jwt
+      - auth/script/lib/PHPMailer
