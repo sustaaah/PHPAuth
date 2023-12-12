@@ -1,13 +1,13 @@
 <?php
 require("config.php");
+require("validateCaptcha.php");
 
 /**
- * Summary of generateUniqId
- * @param mixed $mail
- * @param mixed $length
+ * @param string $mail
+ * @param int $length
  * @return string
  */
-function generateUniqId($mail, $length = 128)
+function generateUniqId(string $mail, int $length = 128): string
 {
 	$characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 	$randomString = '';
@@ -16,19 +16,17 @@ function generateUniqId($mail, $length = 128)
 		$randomString .= $characters[$randomCharIndex];
 	}
 
-	$output = time() . ".u." . $randomString . "." . md5($mail);
-	return $output;
+    return time() . ".u." . $randomString . "." . md5($mail);
 }
 
 /**
- * Summary of validateAll
- * @param mixed $name
- * @param mixed $surname
- * @param mixed $email
- * @param mixed $password
+ * @param string $name
+ * @param string $surname
+ * @param string $email
+ * @param string $password
  * @return array
  */
-function validateAll($name, $surname, $email, $password)
+function validateAll(string $name, string $surname, string $email, string $password): array
 {
 	require("validationScript.php");
 
@@ -56,19 +54,8 @@ $jsonResponse = array(); // status, cause(only if error), redirect(can be empty)
 $jsonResponse['status'] = "error";
 
 if (isset($_POST["name"]) && isset($_POST["surname"]) && isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["captcha"])) {
-	$dataCaptcha = array(
-		'secret' => reCaptchaSecret,
-		'response' => $_POST['captcha'],
-	);
-	$verifyCaptcha = curl_init();
-	curl_setopt($verifyCaptcha, CURLOPT_URL, "https://www.google.com/recaptcha/api/siteverify");
-	curl_setopt($verifyCaptcha, CURLOPT_POST, true);
-	curl_setopt($verifyCaptcha, CURLOPT_POSTFIELDS, http_build_query($dataCaptcha));
-	curl_setopt($verifyCaptcha, CURLOPT_RETURNTRANSFER, true);
-	$responseCaptcha = curl_exec($verifyCaptcha); // var_dump($responseCaptcha);
-	$responseCaptcha = json_decode($responseCaptcha);
 
-	if ($responseCaptcha->success) {
+	if (getResponseCaptcha($_POST["captcha"])){
 		$inputName = trim($_POST['name']);
 		$inputSurname = trim($_POST['surname']);
 		$inputEmail = trim($_POST['email']);
@@ -124,7 +111,7 @@ if (isset($_POST["name"]) && isset($_POST["surname"]) && isset($_POST["email"]) 
 
 					$stmtNew->execute();
 
-					// check if the user has an unique id
+					// check if the user has a unique id
 					$sqlCheck = "SELECT * FROM " . tablePrefix . "user WHERE userUniqId = :userUniqId";
 					$stmtCheck = $pdo->prepare($sqlCheck);
 					$stmtCheck->execute(['userUniqId' => $userUniqId]);
@@ -144,7 +131,7 @@ if (isset($_POST["name"]) && isset($_POST["surname"]) && isset($_POST["email"]) 
 
 						$rememberSession = true;
 						// TODO aggiungi un handling della risposta
-						sessionConstructor($resultCheck['id'], $userUniqId, $rememberSession);
+						sessionConstructor($userUniqId, $rememberSession);
 
 						//
 						// add here your script for the registration (es. create a table for the user)
@@ -163,6 +150,7 @@ if (isset($_POST["name"]) && isset($_POST["surname"]) && isset($_POST["email"]) 
 			} catch (PDOException $e) { // connection error
 				$jsonResponse['cause'] = "serverError";
 				error_log("\n" . __FILE__ . " : " . time() . " : " . $e, errorLogMode, errorLogPath);
+			} catch (Exception $e) {
 			}
 		} else {
 			$jsonResponse['cause'] = "validationError";
@@ -182,4 +170,3 @@ if (isset($_POST["name"]) && isset($_POST["surname"]) && isset($_POST["email"]) 
 $pdo = null;
 
 echo json_encode($jsonResponse);
-?>

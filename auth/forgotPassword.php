@@ -57,11 +57,11 @@ if ($auth["status"]) {
 			<div class="alert alert-danger" role="alert" id="bannerError" style="display: none;"></div>
 			<div class="form-floating">
 				<input type="password" class="form-control" id="passwordInput" placeholder="Password">
-				<label for="floatingInput">Password</label>
+				<label for="passwordInput">Password</label>
 			</div>
 			<div class="form-floating">
 				<input type="password" class="form-control" id="repeatPasswordInput" placeholder="Repeat password">
-				<label for="floatingPassword">Repeat password</label>
+				<label for="repeatPasswordInput">Repeat password</label>
 			</div>
 			<button class="btn btn-primary w-100 my-3 py-2 g-recaptcha" type="submit"
 				data-sitekey="<?php echo reCaptchaPublic ?>" data-theme="dark"

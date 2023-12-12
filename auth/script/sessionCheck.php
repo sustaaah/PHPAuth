@@ -16,4 +16,3 @@ if (isset($checkLogin["email"])) {
 }
 
 	print(json_encode($checkLogin));
-?>

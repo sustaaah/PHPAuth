@@ -12,7 +12,7 @@ require(__DIR__ . '/lib/PHPMailer/SMTP.php');
  * @param array $params
  * @return array
  */
-function mailer($template, $mailTo, $nameTo, $surnameTo, array $params = array())
+function mailer(string $template, string $mailTo, string $nameTo, string $surnameTo, array $params = array()): array
 {
 	require('config.php');
 	$responseStatus = array();
@@ -52,7 +52,6 @@ function mailer($template, $mailTo, $nameTo, $surnameTo, array $params = array()
 			break;
 		default:
 			return $responseStatus;
-			break;
 	}
 
 	try {
@@ -70,7 +69,7 @@ function mailer($template, $mailTo, $nameTo, $surnameTo, array $params = array()
 		$PHPMailer->addAddress($mailTo, $nameTo . ' ' . $surnameTo);
 		$PHPMailer->Subject = $subject;
 		$PHPMailer->Body = $message;
-		$PHPMailer->isHTML(true);
+		$PHPMailer->isHTML();
 
 		if ($PHPMailer->send()) {
 			$responseStatus['status'] = true;

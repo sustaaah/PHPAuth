@@ -1,6 +1,6 @@
 <?php
 require("config.php");
-
+require("validateCaptcha.php");
 require("sessionCheckScript.php");
 $auth = checkLogin();
 
@@ -15,19 +15,8 @@ if ($auth["status"]) {
 $response["status"] = "error";
 
 if (isset($_POST["captcha"], $_POST["token"], $_POST["password"], $_POST["repeatPassword"])) {
-	$dataCaptcha = array(
-		'secret' => reCaptchaSecret,
-		'response' => $_POST['captcha'],
-	);
-	$verifyCaptcha = curl_init();
-	curl_setopt($verifyCaptcha, CURLOPT_URL, "https://www.google.com/recaptcha/api/siteverify");
-	curl_setopt($verifyCaptcha, CURLOPT_POST, true);
-	curl_setopt($verifyCaptcha, CURLOPT_POSTFIELDS, http_build_query($dataCaptcha));
-	curl_setopt($verifyCaptcha, CURLOPT_RETURNTRANSFER, true);
-	$responseCaptcha = curl_exec($verifyCaptcha); // var_dump($responseCaptcha);
-	$responseCaptcha = json_decode($responseCaptcha);
 
-	if ($responseCaptcha->success) {
+    if (getResponseCaptcha($_POST["captcha"])) {
 		// your success code goes here
 		$requestToken = $_POST['token'];
 
@@ -108,4 +97,3 @@ if (isset($_POST["captcha"], $_POST["token"], $_POST["password"], $_POST["repeat
 }
 
 echo json_encode($response);
-?>

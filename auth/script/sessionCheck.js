@@ -1,4 +1,4 @@
- const urlCheck = "https://www.sustaaah.com/login-system/auth/script/sessionCheck.php";
+const urlCheck = "https://www.sustaaah.com/login-system/auth/script/sessionCheck.php";
 
 function sessionCheck(canRedirect) {
 	// Create a configuration object for the fetch request

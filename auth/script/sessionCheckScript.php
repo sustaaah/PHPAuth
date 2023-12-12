@@ -22,9 +22,10 @@ if (!$auth["status"]){
 
 /**
  * Summary of checkLogin
+ * @param bool $autoRedirect
  * @return array
  */
-function checkLogin()
+function checkLogin(bool $autoRedirect = false): array
 {
 	require("config.php");
 
@@ -72,7 +73,6 @@ function checkLogin()
 						if ($sessionDbData["isValid"] == 1) { // session valid
 							if ($_SERVER["HTTP_USER_AGENT"] == $sessionDbData["userAgent"]) { // user agent ok
 								$sessionData["statusSession"] = true;
-
 							} else { // incorrect user agent
 								$sessionData["cause"] = "userAgent";
 							}
@@ -103,7 +103,6 @@ function checkLogin()
 					$sessionData["redirectConfirm"] = urlToAuth . "confirmCode.php";
 				}
 
-
 			} elseif ($num_session_found !== 1) {
 				if ($num_session_found == 0) { // no session found
 					$sessionData["cause"] = "noSessionFound";
@@ -123,10 +122,6 @@ function checkLogin()
 			} else {
 				$sessionData["cause"] = "serverError";
 			}
-
-
-
-
 		} catch (PDOException $e) { // query or connection error
 			$sessionData["cause"] = "serverError";
 			error_log("\n" . __FILE__ . " : " . time() . " : " . $e, errorLogMode, errorLogPath);
@@ -137,7 +132,7 @@ function checkLogin()
 	}
 
 	// if all is good, return the session data
-	if ($sessionData["statusSession"] == true && $sessionData["statusUser"] == true) {
+	if ($sessionData["statusSession"] && $sessionData["statusUser"]) {
 		// +++all good+++
 		$sessionData["status"] = true;
 
@@ -145,22 +140,28 @@ function checkLogin()
 		$sessionData["name"] = $userDbData["name"];
 		$sessionData["surname"] = $userDbData["surname"];
 		$sessionData["email"] = $userDbData["email"];
-	} elseif ($sessionData["status"] == false && isset($_COOKIE[cookieName]) && $num_session_found === 1 && $num_user_found === 1) {
-		// remove cookie
+	} elseif (!$sessionData["status"] && isset($_COOKIE[cookieName]) && $num_session_found === 1 && $num_user_found === 1) {
 		require("logoutScript.php");
 
 		$logoutResponse = logout();
-		if ($logoutResponse['status'] == true) {
+		if ($logoutResponse['status']) {
 			$sessionData["logout"] = true;
 		} else {
 			$sessionData["logout"] = false;
 		}
 
 		$sessionData["redirectUrl"] = redirectAfterLogout;
+
+		if ($autoRedirect) {
+			header("Location: " . $sessionData["redirectUrl"]);
+
+			$pdo = null;
+
+			die();
+		}
 	}
 
 	$pdo = null;
 
 	return $sessionData;
 }
-?>

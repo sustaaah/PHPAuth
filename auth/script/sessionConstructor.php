@@ -7,11 +7,11 @@ require("lib/jwt/BeforeValidException.php");
  * @param string $ip
  * @return mixed
  */
-function localizeIp(string $ip)
+function localizeIp(string $ip): mixed
 {
 	require("config.php");
 
-	$url = "http://ip-api.com/json/{$ip}?fields=16895";
+	$url = "http://ip-api.com/json/$ip?fields=16895";
 
 	$ch = curl_init($url);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -35,13 +35,14 @@ function localizeIp(string $ip)
 }
 
 /**
- * Summary of sessionConstructor
  * @param string $userId
  * @param string $userUniqId
  * @param bool $remember
- * @return array|bool
+ * @return bool|array
+ * @throws Exception
  */
-function sessionConstructor(string $userId, string $userUniqId, bool $remember)
+// TODo fix first parameter
+function sessionConstructor(string $userUniqId, bool $remember)
 {
 	require("config.php");
 
@@ -128,7 +129,7 @@ function sessionConstructor(string $userId, string $userUniqId, bool $remember)
  * @param int $length
  * @return string
  */
-function generateRandomString(int $length = 128)
+function generateRandomString(int $length = 128): string
 {
 	$characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 	$randomString = '';
@@ -137,8 +138,6 @@ function generateRandomString(int $length = 128)
 		$randomString .= $characters[$randomCharIndex];
 	}
 
-	$output = time() . "." . $randomString . "." . uniqid();
-	return $output;
+	return time() . "." . $randomString . "." . uniqid();
 }
 
-?>

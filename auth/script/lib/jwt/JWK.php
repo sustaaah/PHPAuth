@@ -45,14 +45,10 @@ class JWK
 	 * Parse a set of JWK keys
 	 *
 	 * @param array<mixed> $jwks The JSON Web Key Set as an associative array
-	 * @param string       $defaultAlg The algorithm for the Key object if "alg" is not set in the
+	 * @param string|null $defaultAlg The algorithm for the Key object if "alg" is not set in the
 	 *                                 JSON Web Key Set
 	 *
 	 * @return array<string, Key> An associative array of key IDs (kid) to Key objects
-	 *
-	 * @throws InvalidArgumentException     Provided JWK Set is empty
-	 * @throws UnexpectedValueException     Provided JWK Set was invalid
-	 * @throws DomainException              OpenSSL failure
 	 *
 	 * @uses parseKey
 	 */
@@ -86,14 +82,10 @@ class JWK
 	 * Parse a JWK key
 	 *
 	 * @param array<mixed> $jwk An individual JWK
-	 * @param string       $defaultAlg The algorithm for the Key object if "alg" is not set in the
+	 * @param string|null $defaultAlg The algorithm for the Key object if "alg" is not set in the
 	 *                                 JSON Web Key Set
 	 *
-	 * @return Key The key object for the JWK
-	 *
-	 * @throws InvalidArgumentException     Provided JWK is empty
-	 * @throws UnexpectedValueException     Provided JWK was invalid
-	 * @throws DomainException              OpenSSL failure
+	 * @return Key|null The key object for the JWK
 	 *
 	 * @uses createPemFromModulusAndExponent
 	 */

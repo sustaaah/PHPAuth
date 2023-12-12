@@ -36,7 +36,7 @@ function validateInput() {
 function register(tokenCaptcha) {
 	const url = "https://www.sustaaah.com/login-system/auth/script/registerScript.php"; // Replace this with your API endpoint
 
-	if (inputPassword.value == inputCheckPassword.value) {
+	if (inputPassword.value === inputCheckPassword.value) {
 		const data = new URLSearchParams();
 		data.append("name", inputName.value);
 		data.append("surname", inputSurname.value);
@@ -62,13 +62,13 @@ function register(tokenCaptcha) {
 				// Process the responseData here
 				console.log(responseData);
 
-				if (responseData["status"] == "success") {
+				if (responseData["status"] === "success") {
 					// successful response
 					if (urlRegex.test(responseData["redirect"])) {
 						bannerSuccess.innerHTML = "Success! Your account has been created";
 						window.location.href = responseData["redirect"];
 					}
-				} else if (responseData["status"] == "error") {
+				} else if (responseData["status"] === "error") {
 					// error response
 					bannerError.style.display = "block";
 
@@ -102,5 +102,5 @@ function register(tokenCaptcha) {
 		bannerError.innerHTML = "Both passwords must be identical";
 	}
 
-	return false;
+	return true;
 }

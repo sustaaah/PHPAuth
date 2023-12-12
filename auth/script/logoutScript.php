@@ -1,5 +1,5 @@
 <?php
-function logout()
+function logout(): array
 {
 	require("config.php");
 
@@ -54,4 +54,3 @@ function logout()
 	$pdo = null;
 	return $response;
 }
-?>

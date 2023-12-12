@@ -4,7 +4,7 @@
  * @param mixed $name
  * @return bool
  */
-function validateName($name)
+function validateName(string $name): bool
 {
 	$pattern = "/^[a-zA-Z ',-]+$/u";
 	$name = trim($name);
@@ -21,7 +21,7 @@ function validateName($name)
  * @param mixed $email
  * @return bool
  */
-function validateEmail($email)
+function validateEmail(string $email): bool
 {
 	$email = trim($email);
 
@@ -37,7 +37,7 @@ function validateEmail($email)
  * @param mixed $password
  * @return bool
  */
-function validatePassword($password)
+function validatePassword(string $password): bool
 {
 	// $pattern = '/^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){8,16}$/';
 

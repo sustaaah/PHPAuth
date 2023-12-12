@@ -68,8 +68,8 @@ class JWT
 	/**
 	 * Decodes a JWT string into a PHP object.
 	 *
-	 * @param string                 $jwt            The JWT
-	 * @param Key|ArrayAccess<string,Key>|array<string,Key> $keyOrKeyArray  The Key or associative array of key IDs
+	 * @param string $jwt The JWT
+	 * @param Key|ArrayAccess<string,Key>|array<string,Key> $keyOrKeyArray The Key or associative array of key IDs
 	 *                                                                      (kid) to Key objects.
 	 *                                                                      If the algorithm used is asymmetric, this is
 	 *                                                                      the public key.
@@ -78,17 +78,9 @@ class JWT
 	 *                                                                      Supported algorithms are 'ES384','ES256',
 	 *                                                                      'HS256', 'HS384', 'HS512', 'RS256', 'RS384'
 	 *                                                                      and 'RS512'.
-	 * @param stdClass               $headers                               Optional. Populates stdClass with headers.
+	 * @param stdClass|null $headers Optional. Populates stdClass with headers.
 	 *
 	 * @return stdClass The JWT's payload as a PHP object
-	 *
-	 * @throws InvalidArgumentException     Provided key/key-array was empty or malformed
-	 * @throws DomainException              Provided JWT is malformed
-	 * @throws UnexpectedValueException     Provided JWT was invalid
-	 * @throws SignatureInvalidException    Provided JWT was invalid because the signature verification failed
-	 * @throws BeforeValidException         Provided JWT is trying to be used before it's eligible as defined by 'nbf'
-	 * @throws BeforeValidException         Provided JWT is trying to be used before it's been created as defined by 'iat'
-	 * @throws ExpiredException             Provided JWT has since expired, as defined by the 'exp' claim
 	 *
 	 * @uses jsonDecode
 	 * @uses urlsafeB64Decode
@@ -178,12 +170,12 @@ class JWT
 	/**
 	 * Converts and signs a PHP array into a JWT string.
 	 *
-	 * @param array<mixed>          $payload PHP array
+	 * @param array<mixed> $payload PHP array
 	 * @param string|resource|OpenSSLAsymmetricKey|OpenSSLCertificate $key The secret key.
-	 * @param string                $alg     Supported algorithms are 'ES384','ES256', 'ES256K', 'HS256',
+	 * @param string $alg Supported algorithms are 'ES384','ES256', 'ES256K', 'HS256',
 	 *                                       'HS384', 'HS512', 'RS256', 'RS384', and 'RS512'
-	 * @param string                $keyId
-	 * @param array<string, string> $head    An array with header elements to attach
+	 * @param string|null $keyId
+	 * @param array<string, string> $head An array with header elements to attach
 	 *
 	 * @return string A signed JWT
 	 *

@@ -13,7 +13,12 @@ if ($auth["status"]) {
 	die();
 }
 
-function generateRequestId($mail, $length = 256)
+/**
+ * @param $mail
+ * @param int $length
+ * @return string
+ */
+function generateRequestId($mail, int $length = 256): string
 {
 	$characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 	$randomString = '';
@@ -22,8 +27,7 @@ function generateRequestId($mail, $length = 256)
 		$randomString .= $characters[$randomCharIndex];
 	}
 
-	$output = uniqid('', true) . $randomString . md5($mail);
-	return $output;
+	return uniqid('', true) . $randomString . md5($mail);
 }
 
 $response["status"] = "error";
@@ -31,19 +35,7 @@ $response["status"] = "error";
 if (isset($_POST["captcha"], $_POST["email"])) {
 	$inputEmail = trim($_POST["email"]);
 
-	$dataCaptcha = array(
-		'secret' => reCaptchaSecret,
-		'response' => $_POST['captcha'],
-	);
-	$verifyCaptcha = curl_init();
-	curl_setopt($verifyCaptcha, CURLOPT_URL, "https://www.google.com/recaptcha/api/siteverify");
-	curl_setopt($verifyCaptcha, CURLOPT_POST, true);
-	curl_setopt($verifyCaptcha, CURLOPT_POSTFIELDS, http_build_query($dataCaptcha));
-	curl_setopt($verifyCaptcha, CURLOPT_RETURNTRANSFER, true);
-	$responseCaptcha = curl_exec($verifyCaptcha); // var_dump($responseCaptcha);
-	$responseCaptcha = json_decode($responseCaptcha);
-
-	if ($responseCaptcha->success) {
+	if (getResponseCaptcha($_POST["captcha"])){
 		// your success code goes here
 		try {
 			$pdo = new PDO("mysql:host=" . dbHost . ";dbname=" . dbName, dbUsername, dbPassword);
@@ -103,7 +95,7 @@ if (isset($_POST["captcha"], $_POST["email"])) {
 		} elseif ($num_users_found === 0) {
 			$response["cause"] = "noUsersFound";
 		} else {
-			error_log("\n" . __FILE__ . " : " . time() . " : " . "more than an user found with the same email: $mailInput", errorLogMode, errorLogPath);
+			error_log("\n" . __FILE__ . " : " . time() . " : " . "more than an user found with the same email: $inputEmail", errorLogMode, errorLogPath);
 			$response["cause"] = "serverError";
 
 		}
@@ -116,4 +108,3 @@ if (isset($_POST["captcha"], $_POST["email"])) {
 }
 
 echo (json_encode($response));
-?>

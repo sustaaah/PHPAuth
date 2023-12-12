@@ -7,10 +7,10 @@ require("script/lib/jwt/Key.php");
 
 $logout = logout();
 
-if ($logout['status'] == true) {
+if ($logout['status']) {
 	header("Location: " . $logout["redirectUrl"]);
 	print("Logged out");
-} elseif ($logout['status'] == false) {
+} elseif (!$logout['status']) {
 	if ($logout['cause'] == "noCookieValue") {
 		header("Location: " . $logout["redirectUrl"]);
 		print("no cookie value");
@@ -24,4 +24,3 @@ if ($logout['status'] == true) {
 
 }
 // TODO creare html
-?>

@@ -1,23 +1,13 @@
 <?php
 require("config.php");
+require("validateCaptcha.php");
 
 $jsonResponse = array();
 $jsonResponse["status"] = "error";
 
 if (isset($_POST["email"], $_POST["password"], $_POST["remember"], $_POST["captcha"])) {
-	$dataCaptcha = array(
-		'secret' => reCaptchaSecret,
-		'response' => $_POST['captcha'],
-	);
-	$verifyCaptcha = curl_init();
-	curl_setopt($verifyCaptcha, CURLOPT_URL, "https://www.google.com/recaptcha/api/siteverify");
-	curl_setopt($verifyCaptcha, CURLOPT_POST, true);
-	curl_setopt($verifyCaptcha, CURLOPT_POSTFIELDS, http_build_query($dataCaptcha));
-	curl_setopt($verifyCaptcha, CURLOPT_RETURNTRANSFER, true);
-	$responseCaptcha = curl_exec($verifyCaptcha); // var_dump($responseCaptcha);
-	$responseCaptcha = json_decode($responseCaptcha);
 
-	if ($responseCaptcha->success) {
+	if (getResponseCaptcha($_POST["captcha"])){
 		try {
 			$pdo = new PDO("mysql:host=" . dbHost . ";dbname=" . dbName, dbUsername, dbPassword);
 			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -47,7 +37,7 @@ if (isset($_POST["email"], $_POST["password"], $_POST["remember"], $_POST["captc
 
 					require("sessionConstructor.php");
 
-					$sessionConstructorStatus = sessionConstructor($userData["id"], $userData["userUniqId"], $rememberSession);
+					$sessionConstructorStatus = sessionConstructor($userData["userUniqId"], $rememberSession);
 
 					if ($sessionConstructorStatus["status"]) {
 						if ($sessionConstructorStatus["locationIp"]["status"] == "success") {
@@ -76,6 +66,7 @@ if (isset($_POST["email"], $_POST["password"], $_POST["remember"], $_POST["captc
 		} catch (PDOException $e) {
 			$jsonResponse["cause"] = "serverError";
 			error_log("\n" . __FILE__ . " : " . time() . " : " . $e, errorLogMode, errorLogPath);
+		} catch (Exception $e) {
 		}
 	} else {
 		$jsonResponse["cause"] = "captchaFail";
@@ -85,4 +76,3 @@ if (isset($_POST["email"], $_POST["password"], $_POST["remember"], $_POST["captc
 }
 
 echo json_encode($jsonResponse);
-?>

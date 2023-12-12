@@ -2,7 +2,7 @@ function getUrlParam(paramToSearch) {
 	var queryString = window.location.search;
 	queryString = queryString.substring(1);
 	var params = queryString.split("&");
-	var valoreParametro = null;
+	let valoreParametro = null;
 
 	for (var i = 0; i < params.length; i++) {
 		var param = params[i].split("=");

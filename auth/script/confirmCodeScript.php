@@ -1,7 +1,7 @@
 <?php
 require("config.php");
-
-require("sessionCheckScript.php"); // fill this with your path
+require("validateCaptcha.php");
+require("sessionCheckScript.php");
 $auth = checkLogin();
 
 if (!$auth["status"]) {
@@ -13,22 +13,9 @@ if (!$auth["status"]) {
 	die();
 }
 
-$dataCaptcha = array(
-	'secret' => reCaptchaSecret,
-	'response' => $_POST['captcha'],
-);
-$verifyCaptcha = curl_init();
-curl_setopt($verifyCaptcha, CURLOPT_URL, "https://www.google.com/recaptcha/api/siteverify");
-curl_setopt($verifyCaptcha, CURLOPT_POST, true);
-curl_setopt($verifyCaptcha, CURLOPT_POSTFIELDS, http_build_query($dataCaptcha));
-curl_setopt($verifyCaptcha, CURLOPT_RETURNTRANSFER, true);
-$responseCaptcha = curl_exec($verifyCaptcha); // var_dump($responseCaptcha);
-$responseCaptcha = json_decode($responseCaptcha);
-
-
 $jsonResponse["status"] = false;
 
-if ($responseCaptcha->success) { // captcha success
+if (getResponseCaptcha($_POST["captcha"])) { // captcha success
 	// your success code goes here
 	if (isset($_POST["code"])) {
 		if ($auth["needConfirm"]) {
@@ -100,4 +87,3 @@ foreach ($jsonResponse as &$value) {
 
 
 echo json_encode($jsonResponse);
-?>

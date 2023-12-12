@@ -3380,10 +3380,12 @@ class PHPMailer
 	 * Encode a file attachment in requested format.
 	 * Returns an empty string on failure.
 	 *
-	 * @param string $path     The full path to the file
+	 * @param string $path The full path to the file
 	 * @param string $encoding The encoding to use; one of 'base64', '7bit', '8bit', 'binary', 'quoted-printable'
 	 *
 	 * @return string
+	 * @throws Exception
+	 * @throws Exception
 	 */
 	protected function encodeFile($path, $encoding = self::ENCODING_BASE64)
 	{

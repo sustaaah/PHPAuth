@@ -26,13 +26,13 @@ function sendCode(tokenCaptcha) {
 			bannerSuccess = document.getElementById("bannerSuccess");
 			bannerError = document.getElementById("bannerError");
 
-			if (responseData.status == "true") {
+			if (responseData.status === "true") {
 				// success
 				bannerSuccess.style.display = "block";
 
 				bannerSuccess.innerHTML = "<strong>Success!</strong> If the redirect is not done automatically, <a  class='alert-link' href='" + responseData.redirectUrl + "'>click here</a>";
 				window.location.replace = responseData.redirectUrl;
-			} else if (responseData.status == "false") {
+			} else if (responseData.status === "false") {
 				// fail
 				bannerError.style.display = "block";
 
