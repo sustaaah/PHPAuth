@@ -2,6 +2,8 @@ version: "1.0"
 linter: jetbrains/qodana-php:2023.2
 include:
   - name: CheckDependencyLicenses
+  - name: PhpConditionAlreadyCheckedInspection
+  - name: PhpMissingReturnTypeInspection
 exclude:
   - name: All
     paths:
