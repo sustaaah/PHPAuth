@@ -1,7 +1,7 @@
 <?php
 require("script/config.php");
-
 require("script/sessionCheckScript.php");
+
 $auth = checkLogin();
 
 if ($auth["status"]) {

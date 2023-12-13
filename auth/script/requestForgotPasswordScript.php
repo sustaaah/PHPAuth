@@ -32,6 +32,8 @@ function generateRequestId($mail, int $length = 256): string
 
 $response["status"] = "error";
 
+require("validateCaptcha.php");
+
 if (isset($_POST["captcha"], $_POST["email"])) {
 	$inputEmail = trim($_POST["email"]);
 

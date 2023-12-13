@@ -27,7 +27,14 @@ if (!$auth["status"]){
  */
 function checkLogin(bool $autoRedirect = false): array
 {
-	require("config.php");
+	// require("config.php");
+
+	$sessionData = [
+		"status" => false,
+		"statusUser" => false,
+		"statusSession" => false
+		// Inizializza le altre chiavi necessarie
+	];
 
 	if (isset($_COOKIE[cookieName])) {
 		$sessionData = [];
